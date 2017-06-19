@@ -69,7 +69,7 @@ int cgiMain()
 
 
 
-	strcpy(sql, "create table stu(id int not null primary key, name varchar(20) not null, age int not null,sex varchar(10) not null)");
+	strcpy(sql, "create table stu(id int not null primary key, name varchar(20) not null, age int not null,sex char(2) not null)");
 	if ((ret = mysql_real_query(db, sql, strlen(sql) + 1)) != 0)
 	{
 		if (ret != 1)
