@@ -12,7 +12,7 @@ int cgiMain()
 	char name[32] = "\0";
 	char age[16] = "\0";
 	char stuId[32] = "\0";
-	char sex[10] = "\0";
+	//char sex[10] = "\0";
 	int status = 0;
 
 	status = cgiFormString("name",  name, 32);
@@ -36,12 +36,12 @@ int cgiMain()
 		return 1;
 	}
 
-	status = cgiFormString("sex",  sex, 10);
-	if (status != cgiFormSuccess)
-	{
-		fprintf(cgiOut, "get stuId error!\n");
-		return 1;
-	}
+	// status = cgiFormString("sex",  sex, 10);
+	// if (status != cgiFormSuccess)
+	// {
+	// 	fprintf(cgiOut, "get stuId error!\n");
+	// 	return 1;
+	// }
 
 
 	//fprintf(cgiOut, "name = %s, age = %s, stuId = %s\n", name, age, stuId);
@@ -69,7 +69,7 @@ int cgiMain()
 
 
 
-	strcpy(sql, "create table stu(id int not null primary key, name varchar(20) not null, age int not null,sex char(2) not null)");
+	strcpy(sql, "create table stu(id int not null primary key, name varchar(20) not null, age int not null)");
 	if ((ret = mysql_real_query(db, sql, strlen(sql) + 1)) != 0)
 	{
 		if (ret != 1)
@@ -82,7 +82,7 @@ int cgiMain()
 
 
 
-	sprintf(sql, "insert into stu values(%d, '%s', %d,'%s')", atoi(stuId), name, atoi(age), sex );
+	sprintf(sql, "insert into stu values(%d, '%s', %d)", atoi(stuId), name, atoi(age) );
 	if (mysql_real_query(db, sql, strlen(sql) + 1) != 0)
 	{
 		fprintf(cgiOut, "%s\n", mysql_error(db));
