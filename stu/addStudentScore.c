@@ -13,10 +13,10 @@ int cgiMain()
 	FILE * fd;
 
 	char name[32] = "\0";
-	char age[16] = "\0";
 	char stuId[32] = "\0";
-	char sex[16] = "\0";
-	char dept[32] = "\0";
+	char class[32] = "\0";
+	char core[16] = "\0";
+
 	int status = 0;
 	char ch;
 
@@ -40,13 +40,6 @@ int cgiMain()
 		return 1;
 	}
 
-	status = cgiFormString("age",  age, 16);
-	if (status != cgiFormSuccess)
-	{
-		fprintf(cgiOut, "get age error!\n");
-		return 1;
-	}
-
 	status = cgiFormString("stuId",  stuId, 32);
 	if (status != cgiFormSuccess)
 	{
@@ -54,21 +47,19 @@ int cgiMain()
 		return 1;
 	}
 
-	status = cgiFormString("sex",  sex, 16);
+	status = cgiFormString("class",  class, 32);
 	if (status != cgiFormSuccess)
 	{
-		fprintf(cgiOut, "get sex error!\n");
+		fprintf(cgiOut, "get class error!\n");
 		return 1;
 	}
 
-	status = cgiFormString("dept",  dept, 32);
+	status = cgiFormString("core",  core, 16);
 	if (status != cgiFormSuccess)
 	{
-		fprintf(cgiOut, "get dept error!\n");
+		fprintf(cgiOut, "get core error!\n");
 		return 1;
 	}
-
-	//fprintf(cgiOut, "name = %s, age = %s, stuId = %s\n", name, age, stuId);
 
 	int ret;
 	char sql[128] = "\0";
@@ -91,9 +82,7 @@ int cgiMain()
 		return -1;
 	}
 
-
-
-	strcpy(sql, "create table information(stuId int not null primary key, name varchar(20) not null, age int not null, sex varchar(10) not null,dept varchar(20) not null )");
+	strcpy(sql, "create table score(stuid int not null primary key, name varchar(20) not null, class varchar(20) not null, core int not null )");
 	if ((ret = mysql_real_query(db, sql, strlen(sql) + 1)) != 0)
 	{
 		if (ret != 1)
@@ -104,16 +93,14 @@ int cgiMain()
 		}
 	}
 
-
-
-	sprintf(sql, "insert into information values(%d, '%s', %d,'%s','%s')", atoi(stuId), name, atoi(age),sex,dept);
+	sprintf(sql, "insert into score values(%d, '%s', '%s', %d)", atoi(stuId), name, class, atoi(core));
 	if (mysql_real_query(db, sql, strlen(sql) + 1) != 0)
 	{
 		fprintf(cgiOut, "%s\n", mysql_error(db));
 		mysql_close(db);
 		return -1;
 	}
-
+  status = 1;//sign status
 	fprintf(cgiOut, "add student ok!\n");
 	mysql_close(db);
 	return 0;
